@@ -66,9 +66,6 @@ for gamma in [0.99]:
         env_config, lr=0.001, gamma=gamma, n_hidden=32)
     #### Optimal policy
     trainer = ppo.PPOTrainer(env=_Simulator.Simulator, config=agent_config)
-    # trainer.restore('cp/cartpole_gamma_{}/checkpoint_000019/checkpoint-19'.format(gamma))
-    # trainer.restore('cp/cartpole_gamma_{}/checkpoint_000020/checkpoint-20'.format(gamma))
-    # trainer.restore('cp/cartpole_gamma_{}/checkpoint_000050/checkpoint-50'.format(gamma))
     trainer.restore('cp/cartpole_gamma_{}/checkpoint_000100/checkpoint-100'.format(gamma))
     pi = RLlibPolicy(trainer)
     behav = EpsilonPolicy(pi, epsilon=0.3, n_actions=len(A_range))
@@ -261,80 +258,78 @@ class Runner():
 
         return res_this_setting
 
-# %% empirical performance when df increases
+# %% empirical performance when df increases (Figure 3(a))
 
-# BOOT_MM_COMPARISON = False
-# res_settings = {}
-# ct = now()
-# PRINT_FREQ = 32
-# path = "res/" + "cartpole" + "_eval" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
-# printR(path)
-# runner = Runner(env_config, agent_config)
-# STD_LIST = [1, 2]
-# EPSILON_LIST = [0.05]
-# # DF_LIST = [1.        , 1.18920712, 1.41421356, 1.68179283, 2.        ]
-# DF_LIST = np.logspace(0.0, 0.6, 5, base=2.0).tolist()
-# for gamma in [0.99]:  # , 0.9
-#     for std_noise in STD_LIST:  # 1,  , 1 #  2,, 3 # too large
-#         res_settings[(gamma, std_noise)] = {}
-#         for epsilon_behav in EPSILON_LIST:
-#             for df in DF_LIST:
-#                 res_this_setting = runner.run_one_setting(epsilon_behav, df, gamma, std_noise)
-#                 res_settings[(gamma, std_noise)][(epsilon_behav, df)] = res_this_setting
-#                 ########### Save ###########
-#                 #res_settings[(epsilon_behav, df, gamma, std_noise)] = res_this_setting
-#                 dump(res_settings, path)
-#                 ########### Analysis ###########
-#                 clear_output()
-#                 for a in res_settings:
-#                     gamma, std_noise = a
-#                     for b in res_settings[a]:
-#                         epsilon_behav, df = b
-#                         df_res = res_settings[a][b]['df_res']
-#                         print('epsilon_behav = {}, df = {}, gamma = {}, std_noise = {}'.format(
-#                             epsilon_behav, df, gamma, std_noise))
-#                         #df_res.iloc[0] = optimal_value[gamma] - df_res.iloc[0]
-#                         display(df_res)
-#                 print((now() - ct) // 60, "min")
-#                 printR(path)
+BOOT_MM_COMPARISON = False
+res_settings = {}
+ct = now()
+PRINT_FREQ = 32
+path = "res/" + "cartpole" + "_eval" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
+printR(path)
+runner = Runner(env_config, agent_config)
+STD_LIST = [1, 2]
+EPSILON_LIST = [0.05]
+DF_LIST = np.logspace(0.0, 0.6, 5, base=2.0).tolist()
+for gamma in [0.99]:  
+    for std_noise in STD_LIST:
+        res_settings[(gamma, std_noise)] = {}
+        for epsilon_behav in EPSILON_LIST:
+            for df in DF_LIST:
+                res_this_setting = runner.run_one_setting(epsilon_behav, df, gamma, std_noise)
+                res_settings[(gamma, std_noise)][(epsilon_behav, df)] = res_this_setting
+                ########### Save ###########
+                #res_settings[(epsilon_behav, df, gamma, std_noise)] = res_this_setting
+                dump(res_settings, path)
+                ########### Analysis ###########
+                clear_output()
+                for a in res_settings:
+                    gamma, std_noise = a
+                    for b in res_settings[a]:
+                        epsilon_behav, df = b
+                        df_res = res_settings[a][b]['df_res']
+                        print('epsilon_behav = {}, df = {}, gamma = {}, std_noise = {}'.format(
+                            epsilon_behav, df, gamma, std_noise))
+                        #df_res.iloc[0] = optimal_value[gamma] - df_res.iloc[0]
+                        display(df_res)
+                print((now() - ct) // 60, "min")
+                printR(path)
 
-# %% empirical comparison: bootstrap and MM
+# %% empirical comparison: bootstrap and MM (Figure 5)
 
-# res_settings = {}
-# BOOT_MM_COMPARISON = True
-# ct = now()
-# PRINT_FREQ = 32
-# path = "res/" + "cartpole" + "_eval" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
-# printR(path)
-# runner = Runner(env_config, agent_config)
-# STD_LIST = [1]
-# EPSILON_LIST = [0.05]
-# # DF_LIST = [1.        , 1.18920712, 1.41421356, 1.68179283, 2.        ]
-# DF_LIST = np.logspace(0.0, 0.6, 5, base=2.0).tolist()
-# for gamma in [0.99]:  # , 0.9
-#     for std_noise in STD_LIST:  # 1,  , 1 #  2,, 3 # too large
-#         res_settings[(gamma, std_noise)] = {}
-#         for epsilon_behav in EPSILON_LIST:
-#             for df in DF_LIST:
-#                 res_this_setting = runner.run_one_setting(epsilon_behav, df, gamma, std_noise)
-#                 res_settings[(gamma, std_noise)][(epsilon_behav, df)] = res_this_setting
-#                 ########### Save ###########
-#                 dump(res_settings, path)
-#                 ########### Analysis ###########
-#                 clear_output()
-#                 for a in res_settings:
-#                     gamma, std_noise = a
-#                     for b in res_settings[a]:
-#                         epsilon_behav, df = b
-#                         df_res = res_settings[a][b]['df_res']
-#                         print('epsilon_behav = {}, df = {}, gamma = {}, std_noise = {}'.format(
-#                               epsilon_behav, df, gamma, std_noise))
-#                         display(df_res)
-#                 print((now() - ct) // 60, "min")
-#                 printR(path)
-# BOOT_MM_COMPARISON = False
+res_settings = {}
+BOOT_MM_COMPARISON = True
+ct = now()
+PRINT_FREQ = 32
+path = "res/" + "cartpole" + "_eval" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
+printR(path)
+runner = Runner(env_config, agent_config)
+STD_LIST = [1]
+EPSILON_LIST = [0.05]
+DF_LIST = np.logspace(0.0, 0.6, 5, base=2.0).tolist()
+for gamma in [0.99]: 
+    for std_noise in STD_LIST:  
+        res_settings[(gamma, std_noise)] = {}
+        for epsilon_behav in EPSILON_LIST:
+            for df in DF_LIST:
+                res_this_setting = runner.run_one_setting(epsilon_behav, df, gamma, std_noise)
+                res_settings[(gamma, std_noise)][(epsilon_behav, df)] = res_this_setting
+                ########### Save ###########
+                dump(res_settings, path)
+                ########### Analysis ###########
+                clear_output()
+                for a in res_settings:
+                    gamma, std_noise = a
+                    for b in res_settings[a]:
+                        epsilon_behav, df = b
+                        df_res = res_settings[a][b]['df_res']
+                        print('epsilon_behav = {}, df = {}, gamma = {}, std_noise = {}'.format(
+                              epsilon_behav, df, gamma, std_noise))
+                        display(df_res)
+                print((now() - ct) // 60, "min")
+                printR(path)
+BOOT_MM_COMPARISON = False
 
-# %% Trade-off study for robustness and runtime
+# %% Trade-off study for robustness and runtime (Figure 6)
 
 res_settings = {}
 ct = now()
@@ -342,7 +337,6 @@ PRINT_FREQ = 4
 BOOT_MM_COMPARISON = False
 INTERNAL_Q_MM = True
 
-##
 path = "res/" + "cartpole" + "_eval_compute_robust_tradeoff" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
 runner = Runner(env_config, agent_config)
 EPSILON_LIST = [0.05]
@@ -367,37 +361,3 @@ for gamma in [0.99]:
                             display(df_res)
                     print((now() - ct) // 60, "min")
                     printR(path)
-
-
-# %% ablation study for K
-
-# res_settings = {}
-# ct = now()
-# PRINT_FREQ = 4
-# BOOT_MM_COMPARISON = False
-
-# ##
-# path = "res/" + "cartpole" + "_eval" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
-# runner = Runner(env_config, agent_config)
-# EPSILON_LIST = [0.03]
-# DF_LIST = [1.75, 1.5, 1.25, 1.0]
-# L_LIST = [10, 9, 8, 7, 6, 5, 4, 3]
-# for gamma in [0.99]:  
-#     for std_noise in [1.0]:  
-#         res_settings[(gamma, std_noise)] = {}
-#         for epsilon_behav in EPSILON_LIST:
-#             for df in DF_LIST:
-#                 for L in L_LIST:
-#                     res_this_setting = runner.run_one_setting(epsilon_behav, df, gamma, std_noise)
-#                     res_settings[(gamma, std_noise)][(df, L)] = res_this_setting
-#                     dump(res_settings, path)
-#                     clear_output()
-#                     for a in res_settings:
-#                         gamma, std_noise = a
-#                         for b in res_settings[a]:
-#                             df, L = b
-#                             df_res = res_settings[a][b]['df_res']
-#                             print('L = {}, df = {}, gamma = {}, std_noise = {}'.format(L, df, gamma, std_noise))
-#                             display(df_res)
-#                     print((now() - ct) // 60, "min")
-#                     printR(path)

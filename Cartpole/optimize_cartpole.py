@@ -31,9 +31,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 n_gpu = 8
 
 N = 400
-# T = 100
 T = 100
-# [T longer ] We set T = 300 and γ = 0.98 for CartPole, and T = 200 and γ = 0.95 for Diabetes
 gamma = .99
 A_range = [0, 1]
 pess_quantile = 0.4
@@ -45,15 +43,12 @@ std_noise = 0.01  # state
 alpha_levy = 0.8
 df = 1
 heavy_tail = 't'
-# heavy_tail = 'levy'
-###
 L = 5
 
 # %%
 #################################
 N_eval = 5000
 batch_size = 256
-###
 max_iter = 100
 eps = 0.005
 test_freq = 30
@@ -179,7 +174,7 @@ class Runner():
         return res_this_setting
 
 
-# %% emprical performance when df increases
+# %% empirical performance when df increases (Figure 3(b))
 
 res_settings = {}
 ct = now()
@@ -187,16 +182,11 @@ ct = now()
 path = "res/" + "cartpole" + "_opt" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
 printR(path)
 
-# df_list = np.power(2.0, np.arange(-2, 5)).tolist()
 df_list = np.logspace(0, 1, num=5, base=2).tolist()
-# epsilon_behav_list = 0.05 * np.power(2.0, np.arange(4)).tolist()
-# epsilon_behav_list = [0.05, 0.1, 0.2]
-# epsilon_behav_list = [0.01, 0.02]
 epsilon_behav_list = [0.05]
-# epsilon_behav_list = [0.04, 0.02, 0.01]
 
 runner = Runner(env_config, agent_config)
-for gamma in [0.99]:  # , 0.9
+for gamma in [0.99]:
     for std_noise in [0.5, 1.0, 2.0]:  
         res_settings[(gamma, std_noise)] = {}
         for epsilon_behav in epsilon_behav_list:
@@ -215,39 +205,3 @@ for gamma in [0.99]:  # , 0.9
                         display(df_res)
                 print((now() - ct) // 60, "min")
                 printR(path)
-
-# %% ablation study for K
-
-# res_settings = {}
-# ct = now()
-# ##
-# path = "res/" + "cartpole" + "_opt" + "_T_{}".format(T) + "_N_{}".format(N) + "_" + EST()[7:9] + EST()[3:5] + EST()[:2] + EST()[3:5]
-# printR(path)
-
-# EPSILON_LIST = [0.05]
-# DF_LIST = [1.75, 1.5, 1.25, 1.0]
-# PESS_LIST = [0.5, 0.4, 0.3, 0.2, 0.1]
-
-# old_pess_quantile = pess_quantile
-# runner = Runner(env_config, agent_config)
-# for gamma in [0.99]:  # , 0.9
-#     for std_noise in [1.0]:  
-#         res_settings[(gamma, std_noise)] = {}
-#         for epsilon_behav in EPSILON_LIST:
-#             for df in DF_LIST:
-#                 for pess in PESS_LIST:
-#                     pess_quantile = pess
-#                     res_this_setting = runner.run_one_setting(epsilon_behav, df, gamma, std_noise)
-#                     res_settings[(gamma, std_noise)][(pess, df)] = res_this_setting
-#                     dump(res_settings, path)
-#                     clear_output()
-#                     for a in res_settings:
-#                         gamma, std_noise = a
-#                         for b in res_settings[a]:
-#                             pess, df = b
-#                             df_res = res_settings[a][b]['df_res']
-#                             print('pess = {}, df = {}, gamma = {}, std_noise = {}'.format(pess, df, gamma, std_noise))
-#                             display(df_res)
-#                     print((now() - ct) // 60, "min")
-#                     printR(path)
-# pess_quantile = old_pess_quantile
