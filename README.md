@@ -1,7 +1,7 @@
-Robust Offline Policy Evaluation and Optimization with Heavy-Tailed Rewards
+Robust Offline Reinforcement Learning with Heavy-Tailed Rewards
 ---------------
 
-Reproducible code for the paper: [Robust Offline Policy Evaluation and Optimization with Heavy-Tailed Rewards](https://arxiv.org/abs/2310.18715)
+Reproducible code for the paper: [Robust Offline Reinforcement Learning with Heavy-Tailed Rewards](https://arxiv.org/abs/2310.18715)
 
 ### Summary of the paper
 
@@ -26,11 +26,11 @@ Below it is the numerical performance of our proposal (ROOM-VM & P-ROOM-VM) on t
 
 3. `SQL`:
    - `src` directory: implement the sparse Q-learning (SQL) for 
-   - `main_SQL`: the main file for conducting numerical studies for SQL. (reproduce Figure 5)
+   - `main_SQL.py`: the main file for conducting numerical studies for SQL. (reproduce Figure 5)
 
 4. `SAC-N`:
    - `SACN.py` directory: implement the soft-actor critic (SAC) of $N$ ensemble.
-   - `main_SACN`: the main file for conducting numerical studies for SACN. (reproduce Figure A3)
+   - `main_SACN.py`: the main file for conducting numerical studies for SACN. (reproduce Figure A3)
   
 ### Citation
 
@@ -47,5 +47,4 @@ Below it is the numerical performance of our proposal (ROOM-VM & P-ROOM-VM) on t
 
 - Offline RL with No OOD Actions: In-Sample Learning via Implicit Value Regularization, ICLR (2023)
 
-- Uncertainty-Based Offline Reinforcement Learning
-with Diversified Q-Ensemble, NeurIPS (2021)
+- Uncertainty-Based Offline Reinforcement Learning with Diversified Q-Ensemble, NeurIPS (2021)
