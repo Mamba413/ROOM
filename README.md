@@ -35,11 +35,18 @@ Below it is the numerical performance of our proposal (ROOM-VM & P-ROOM-VM) on t
 ### Citation
 
 ```tex
-@article{zhu2023robust,
-  title={Robust Offline Policy Evaluation and Optimization with Heavy-Tailed Rewards},
-  author={Zhu, Jin and Wan, Runzhe and Qi, Zhengling and Luo, Shikai and Shi, Chengchun},
-  journal={arXiv preprint arXiv:2310.18715},
-  year={2023}
+
+@InProceedings{zhu2024robust,
+  title     = 	 {Robust Offline Reinforcement Learning with Heavy-Tailed Rewards},
+  author    =   {Zhu, Jin and Wan, Runzhe and Qi, Zhengling and Luo, Shikai and Shi, Chengchun},
+  booktitle = 	 {Proceedings of The 27th International Conference on Artificial Intelligence and Statistics},
+  pages     = 	 {541--549},
+  year      =   {2024},
+  editor    = 	 {Dasgupta, Sanjoy and Mandt, Stephan and Li, Yingzhen},
+  volume    = 	 {238},
+  series    = 	 {Proceedings of Machine Learning Research},
+  month     = 	 {02--04 May},
+  publisher =    {PMLR}
 }
 ```
 
